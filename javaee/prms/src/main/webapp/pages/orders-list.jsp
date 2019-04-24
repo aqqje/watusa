@@ -238,7 +238,7 @@
 								<tbody>
 
 
-									<c:forEach items="${ordersList}" var="orders">
+									<c:forEach items="${pageInfo.list}" var="orders">
 
 										<tr>
 											<td><input name="ids" type="checkbox"></td>
@@ -268,38 +268,6 @@
                             </tfoot>-->
 							</table>
 							<!--数据列表/-->
-
-							<!--工具栏-->
-							<div class="pull-left">
-								<div class="form-group form-inline">
-									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建">
-											<i class="fa fa-file-o"></i> 新建
-										</button>
-										<button type="button" class="btn btn-default" title="删除">
-											<i class="fa fa-trash-o"></i> 删除
-										</button>
-										<button type="button" class="btn btn-default" title="开启">
-											<i class="fa fa-check"></i> 开启
-										</button>
-										<button type="button" class="btn btn-default" title="屏蔽">
-											<i class="fa fa-ban"></i> 屏蔽
-										</button>
-										<button type="button" class="btn btn-default" title="刷新">
-											<i class="fa fa-refresh"></i> 刷新
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="box-tools pull-right">
-								<div class="has-feedback">
-									<input type="text" class="form-control input-sm"
-										placeholder="搜索"> <span
-										class="glyphicon glyphicon-search form-control-feedback"></span>
-								</div>
-							</div>
-							<!--工具栏/-->
-
 						</div>
 						<!-- 数据表格 /-->
 
@@ -311,11 +279,11 @@
                 <div class="box-footer">
                     <div class="pull-left">
                         <div class="form-group form-inline">
-                            总共2 页，共14 条数据。 每页
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                            总共${pageInfo.pages} 页，共${pageInfo.total} 条数据。 每页
+                            <select id="changePageSize" onchange="changePageSize()" class="form-control">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
                                 <option>4</option>
                                 <option>5</option>
                             </select> 条
@@ -323,19 +291,16 @@
                     </div>
 
                     <div class="box-tools pull-right">
-                        <ul class="pagination">
+                        <ul id="pagination" class="pagination">
                             <li>
-                                <a href="#" aria-label="Previous">首页</a>
+                                <a href="${pageContext.request.contextPath}/orders/findAll.do?page=${pageInfo.navigateFirstPage}&size=${pageInfo.pageSize}" aria-label="Previous">首页</a>
                             </li>
-                            <li><a href="#">上一页</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">下一页</a></li>
+                            <li><a href="${pageContext.request.contextPath}/orders/findAll.do?page=${pageInfo.prePage}&size=${pageInfo.pageSize}">上一页</a></li>
+							<li><a href="${pageContext.request.contextPath}/orders/findAll.do?page=${pageInfo.pageNum}&size=${pageInfo.pageSize}">1</a></li>
+                            
+							<li><a href="${pageContext.request.contextPath}/orders/findAll.do?page=${pageInfo.nextPage}&size=${pageInfo.pageSize}">下一页</a></li>
                             <li>
-                                <a href="#" aria-label="Next">尾页</a>
+                                <a href="${pageContext.request.contextPath}/orders/findAll.do?page=${pageInfo.navigateLastPage}&size=${pageInfo.pageSize}" aria-label="Next">尾页</a>
                             </li>
                         </ul>
                     </div>
@@ -354,16 +319,6 @@
 		<!-- @@close -->
 		<!-- 内容区域 /-->
 
-		<!-- 底部导航 -->
-		<footer class="main-footer">
-			<div class="pull-right hidden-xs">
-				<b>Version</b> 1.0.8
-			</div>
-			<strong>Copyright &copy; 2014-2017 <a
-				href="http://www.itcast.cn">研究院研发部</a>.
-			</strong> All rights reserved.
-		</footer>
-		<!-- 底部导航 /-->
 
 	</div>
 
@@ -461,7 +416,7 @@
 			var pageSize = $("#changePageSize").val();
 
 			//向服务器发送请求，改变没页显示条数
-			location.href = "${pageContext.request.contextPath}/orders/findAll.do?page=1&pageSize="
+			location.href = "${pageContext.request.contextPath}/orders/findAll.do?page=1&size="
 					+ pageSize;
 		}
 		$(document).ready(function() {
@@ -483,7 +438,64 @@
 			}
 		}
 
+		function pageHref(page, size ){
+		    var s = ${pageInfo.pageSize};
+		    if(size > 0){
+                s = size;
+			}
+			location.href = "${pageContext.request.contextPath}/orders/findAll.do?page="+page+"&size="+s;
+		}
+
 		$(document).ready(function() {
+            $("#changePageSize").val("${pageInfo.size}");
+            var lis = "";
+			var firstPage = '<li onclick="pageHref(${pageInfo.navigateFirstPage})"><a href="javaScript:void(0)" aria-label="Previous">首页</a></li>';
+			var prePage = '<li id="pre-page" onclick="pageHref(${pageInfo.navigateFirstPage})"><a href="javaScript:void(0)">上一页</a></li>';
+			lis += firstPage;
+			lis += prePage;
+			var start;
+			var end;
+			//前3后2
+			var pages = ${pageInfo.pages};
+			var pageNum = ${pageInfo.pageNum};
+			console.log(pages  +pageNum);
+			if(pages <= 5){
+				start = 1;
+				end = pages
+			}else{
+			    start = pageNum - 3;
+			    end = pageNum + 2;
+			    if(start  < 1){
+					start = 1;
+					end = start + 4;
+				}
+				if(end > pages){
+			        end = pages;
+			        start = end - 4;
+				}
+			}
+            for (var i = start; i <= end; i++) {
+                if(pageNum == i){
+                    lis += '<li onclick="pageHref('+i+')" class="active"><a href="javaScript:void(0)">'+i+'</a></li>';
+                }else{
+                    lis += '<li onclick="pageHref('+i+')"><a href="javaScript:void(0)">'+i+'</a></li>';
+				}
+            }
+
+			var nextPage = '<li id="next-page" onclick="pageHref(${pageInfo.pageSize})"><a href="javaScript:void(0)">下一页</a></li>';
+			var lastPage = '<li onclick="pageHref(${pageInfo.pages})"><a href="javaScript:void(0)" aria-label="Next">尾页</a></li>';
+			lis += nextPage;
+			lis += lastPage;
+			$("#pagination").html(lis);
+
+			if(pageNum == 1){
+				$("#pre-page").addClass("disabled");
+                $("#pre-page").removeAttr("onclick");
+			}
+            if(pageNum == pages){
+                $("#next-page").addClass("disabled");
+                $("#next-page").removeAttr("onclick");
+            }
 
 			// 激活导航位置
 			setSidebarActive("admin-datalist");
