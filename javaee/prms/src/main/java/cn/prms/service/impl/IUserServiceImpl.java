@@ -1,5 +1,6 @@
 package cn.prms.service.impl;
 
+import cn.prms.dao.IRoleDao;
 import cn.prms.dao.IUserDao;
 import cn.prms.domain.Role;
 import cn.prms.domain.UserInfo;
@@ -23,6 +24,8 @@ import java.util.UUID;
 public class IUserServiceImpl implements IUserService {
     @Autowired
     private IUserDao userDao;
+    @Autowired
+    private IRoleDao roleDao;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -60,5 +63,12 @@ public class IUserServiceImpl implements IUserService {
     @Override
     public UserInfo findById(String id) throws Exception {
         return userDao.findById(id);
+    }
+
+    @Override
+    public void addRoleToUser(String userId, String[] lis) throws Exception {
+        for (String roleId: lis) {
+            roleDao.addRoleToUser(userId, roleId);
+        }
     }
 }

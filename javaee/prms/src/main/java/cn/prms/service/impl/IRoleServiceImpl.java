@@ -26,4 +26,9 @@ public class IRoleServiceImpl implements IRoleService {
         role.setId(UuidUtil.getUuid());
         roleDao.save(role);
     }
+
+    @Override
+    public List<Role> findOthersByUserId(String userId) throws  Exception {
+        return roleDao.findOthersByUserId(userId);
+    }
 }

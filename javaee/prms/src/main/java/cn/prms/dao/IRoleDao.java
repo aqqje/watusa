@@ -25,4 +25,11 @@ public interface IRoleDao {
     /*添加角色*/
     @Insert("insert into role values (#{id}, #{roleName}, #{roleDesc})")
     void save(Role role) throws Exception;
+
+    /*获取没关联 userId 的角色*/
+    @Select("select * from role where id not in (select roleId from users_role where userId = #{userId})")
+    List<Role> findOthersByUserId(String userId) throws Exception;
+
+    @Insert("insert into users_role values (#{userId}, #{roleId});")
+    void addRoleToUser(@Param("userId")String userId, @Param("roleId")String roleId) throws Exception;
 }
