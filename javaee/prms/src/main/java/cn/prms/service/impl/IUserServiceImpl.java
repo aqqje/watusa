@@ -4,6 +4,7 @@ import cn.prms.dao.IUserDao;
 import cn.prms.domain.Role;
 import cn.prms.domain.UserInfo;
 import cn.prms.service.IUserService;
+import cn.prms.utils.BCryptPasswordEncoderUtil;
 import cn.prms.utils.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,7 +33,7 @@ public class IUserServiceImpl implements IUserService {
             e.printStackTrace();
         }
         //处理自己的用户对象封装成UserDetails
-        User user = new User(userInfo.getUsername(),"{noop}"+userInfo.getPassword(),userInfo.getStatus() == 0 ? false:true,true,true,true,getAuthority(userInfo.getRoles()));
+        User user = new User(userInfo.getUsername(),userInfo.getPassword(),userInfo.getStatus() == 0 ? false:true,true,true,true,getAuthority(userInfo.getRoles()));
         return user;
     }
     //作用就是返回一个List集合，集合中装入的是角色描述
@@ -51,7 +52,13 @@ public class IUserServiceImpl implements IUserService {
 
     @Override
     public void save(UserInfo user) throws Exception {
+        user.setPassword(BCryptPasswordEncoderUtil.encrypt(user.getPassword()));
         user.setId(UuidUtil.getUuid());
         userDao.save(user);
+    }
+
+    @Override
+    public UserInfo findById(String id) throws Exception {
+        return userDao.findById(id);
     }
 }

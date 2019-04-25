@@ -141,19 +141,19 @@
 								</tr>
 
 								<tbody>
-									<c:forEach items="${user.roles}" var="role">
-										<tr data-tt-id="1" data-tt-parent-id="0">
-											<td>${role.roleName }</td>
-											<td>${role.roleDesc }</td>
+								<tbody>
+								<c:forEach items="${user.roles}" var="role" varStatus="vs">
+									<tr data-tt-id="${vs.index+1}" data-tt-parent-id="0">
+										<td>${role.roleName}</td>
+										<td>${role.roleDesc}</td>
+									</tr>
+									<c:forEach items="${role.permissions}" var="p">
+										<tr data-tt-id="1-1" data-tt-parent-id="${vs.index+1}">
+											<td>${p.permissionName}</td>
+											<td>${p.url}</td>
 										</tr>
-										<c:forEach items="${role.permissions}" var="permission">
-											<tr data-tt-id="1-1" data-tt-parent-id="1">
-												<td>${permission.permissionName}</td>
-												<td>${permission.url}</td>
-											</tr>
-
-										</c:forEach>
 									</c:forEach>
+								</c:forEach>
 								</tbody>
 							</table>
 						</div>
