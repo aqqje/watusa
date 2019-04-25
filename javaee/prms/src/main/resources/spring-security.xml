@@ -23,7 +23,7 @@
                              login-processing-url="/login.do"
                              username-parameter="username"
                              password-parameter="password"
-                             authentication-failure-url="/failer.jsp"
+                             authentication-failure-url="/pages/failer.jsp"
                              default-target-url="/index.jsp"
         />
         <!-- 登出， invalidate-session 是否删除session logout-url：登出处理链接 logout-success-
