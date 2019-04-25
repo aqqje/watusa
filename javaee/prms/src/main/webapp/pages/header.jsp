@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!-- 页面头部 -->
 <header class="main-header">
@@ -26,7 +27,7 @@
 				<li class="dropdown user user-menu">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<img src="${pageContext.request.contextPath}/img/user/user2-160x160.jpg" class="user-image" alt="User Image">
-						<span class="hidden-xs">张猿猿</span>
+						<span class="hidden-xs"><security:authentication property="principal.username"></security:authentication></span>
 					</a>
 					<ul class="dropdown-menu">
 						<!-- User image -->

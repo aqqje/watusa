@@ -5,6 +5,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <!--权限控制-->
+    <security:global-method-security jsr250-annotations="enabled" secured-annotations="enabled"/>
     <!-- 配置不过滤的资源（静态资源及登录相关） -->
     <security:http pattern="/login.jsp" security="none"/>
     <security:http pattern="/pages/failer.jsp" security="none"/>
@@ -12,13 +14,13 @@
     <security:http pattern="/img/**" security="none"/>
     <security:http pattern="/plugins/**" security="none"/>
 
-    <security:http auto-config="true" use-expressions="false">
+    <security:http auto-config="true" use-expressions="true">
         <!-- intercept-url定义一个过滤规则 pattern表示对哪些url进行权限控制，
             access属性表示在请求对应的URL时需要什么权限，
             默认配置时它应该是一个以逗号分隔的角色列表，
             请求的用户只需拥有其中的一个角色就能成功访问对应的URL
         -->
-        <security:intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
         <security:form-login login-page="/login.jsp"
                              login-processing-url="/login.do"
                              username-parameter="username"
@@ -44,4 +46,6 @@
     </security:authentication-manager>
     <!-- 配置加密类 -->
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <!--开启SPEL表达式-->
+    <!--<bean id="webSecurityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>-->
 </beans>
