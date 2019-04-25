@@ -27,4 +27,9 @@ public class PermissionsServiceImpl implements IPermissionsService {
         permission.setId(UuidUtil.getUuid());
         permissionsDao.save(permission);
     }
+
+    @Override
+    public List<Permission> findOtherByRoleId(String roleId) throws Exception {
+        return permissionsDao.findOtherByRoleId(roleId);
+    }
 }

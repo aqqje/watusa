@@ -15,4 +15,10 @@ public interface IRoleService {
 
     /*获取没有关联 userId 的角色*/
     List<Role> findOthersByUserId(String userId) throws Exception;
+
+    /*根据获取一个*/
+    Role findOneById(String roleId) throws Exception;
+
+    /*关联角色与资源*/
+    void addPermissionToRole(String roleId, String[] lis) throws Exception;
 }

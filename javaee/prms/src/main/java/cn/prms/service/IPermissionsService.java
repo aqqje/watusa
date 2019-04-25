@@ -11,4 +11,7 @@ public interface IPermissionsService {
 
     /*添加资源*/
     void save(Permission permission) throws Exception;
+
+    /*根据 roleId 获取其他没有的资源*/
+    List<Permission> findOtherByRoleId(String roleId) throws Exception;
 }
