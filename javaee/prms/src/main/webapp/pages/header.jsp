@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!-- 页面头部 -->
 <header class="main-header">
 	<!-- Logo -->
@@ -29,7 +30,7 @@
 					</a>
 					<ul class="dropdown-menu">
 						<!-- User image -->
-						<li class="user-header">
+						<li class="user-header">${pageContext.request.contextPath}
 							<img src="${pageContext.request.contextPath}/img/user/user2-160x160.jpg" class="img-circle" alt="User Image">
 
 							<p>
@@ -43,7 +44,7 @@
 								<a href="#" class="btn btn-default btn-flat">修改密码</a>
 							</div>
 							<div class="pull-right">
-								<a href="#" class="btn btn-default btn-flat">注销</a>
+								<a href="${ctx}/logout.do" class="btn btn-default btn-flat">注销</a>
 							</div>
 						</li>
 					</ul>

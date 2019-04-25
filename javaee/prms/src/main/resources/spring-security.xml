@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <!-- 配置不过滤的资源（静态资源及登录相关） -->
+    <security:http pattern="/login.jsp" security="none"/>
+    <security:http pattern="/pages/failer.jsp" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+
+    <security:http auto-config="true" use-expressions="false">
+        <!-- intercept-url定义一个过滤规则 pattern表示对哪些url进行权限控制，
+            access属性表示在请求对应的URL时需要什么权限，
+            默认配置时它应该是一个以逗号分隔的角色列表，
+            请求的用户只需拥有其中的一个角色就能成功访问对应的URL
+        -->
+        <security:intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <security:form-login login-page="/login.jsp"
+                             login-processing-url="/login.do"
+                             username-parameter="username"
+                             password-parameter="password"
+                             authentication-failure-url="/failer.jsp"
+                             default-target-url="/index.jsp"
+        />
+        <!-- 登出， invalidate-session 是否删除session logout-url：登出处理链接 logout-success-
+            url：登出成功页面
+            注：登出操作 只需要链接到 logout即可登出当前用户 -->
+        <security:access-denied-handler error-page="/pages/403.jsp"/>
+        <security:logout invalidate-session="true" logout-url="/logout.do"
+                         logout-success-url="/login.jsp" />
+        <!-- 关闭CSRF,默认是开启的 -->
+        <security:csrf disabled="true" />
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userService">
+            <!-- 配置加密的方式
+                        <security:password-encoder ref="passwordEncoder"/>-->
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <!-- 配置加密类 -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 </beans>
