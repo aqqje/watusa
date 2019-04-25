@@ -4,6 +4,7 @@ import cn.prms.dao.IUserDao;
 import cn.prms.domain.Role;
 import cn.prms.domain.UserInfo;
 import cn.prms.service.IUserService;
+import cn.prms.utils.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service("userService")
 @Transactional
@@ -40,5 +42,16 @@ public class IUserServiceImpl implements IUserService {
             list.add(new SimpleGrantedAuthority("ROLE_"+role.getRoleName()));
         }
         return list;
+    }
+
+    @Override
+    public List<UserInfo> findAll() throws Exception{
+        return userDao.findAll();
+    }
+
+    @Override
+    public void save(UserInfo user) throws Exception {
+        user.setId(UuidUtil.getUuid());
+        userDao.save(user);
     }
 }
