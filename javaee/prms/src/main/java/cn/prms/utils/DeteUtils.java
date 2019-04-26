@@ -16,7 +16,7 @@ public class DeteUtils {
     }
     /*字符串转时间*/
     public static Date String2Date(String dateStr, String patt){
-        SimpleDateFormat sdf = new SimpleDateFormat();
+        SimpleDateFormat sdf = new SimpleDateFormat(patt);
         Date date = null;
         try {
             date = sdf.parse(dateStr);
