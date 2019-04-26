@@ -11,10 +11,11 @@ import java.util.List;
  * list: 当前页实体集合
  */
 public class PageBean<T> {
-    private int totalCount;
-    private int totalPage;
-    private int currentPage;
-    private int pageSize;
+    private int totalCount; // 总记录数
+    private int totalPage; // 总页数
+    private int currentPage; // 当前页
+    private int pageSize; // 每页实体数
+    private List<T> list; // 当前页实体集合
 
     public int getTotalCount() {
         return totalCount;
@@ -56,6 +57,6 @@ public class PageBean<T> {
         this.list = list;
     }
 
-    private List<T> list;
+
 
 }

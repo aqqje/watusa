@@ -8,7 +8,11 @@
 		<!--导入jquery-->
 		<script src="js/jquery-3.3.1.js"></script>
 		<script>
-            /*通用校验*/
+            /*校验表单
+            * 	id: 被校验的 input id
+            * 	regx: 校验正则
+            * 	error: 校验错误文件
+            * */
             function check(id,regx,error){
                 $(id).blur(function(){
                     var name = $(id).val();
