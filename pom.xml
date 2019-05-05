@@ -11,6 +11,7 @@
     <modules>
         <module>javaee/travel</module>
         <module>javaee/prms</module>
+        <module>javaee/ssm</module>
     </modules>
 
 
